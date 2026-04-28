@@ -7,16 +7,20 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiErrorResponse } from 'src/common/decorators/api-error-response.decorator';
 import { AuthService } from './auth.service';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { createUserDto } from './dto/create-auth.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() CreateUserDto: createUserDto) {
+  @Post('register')
+  @ApiErrorResponse({
+    validation: createUserDto,
+  })
+  register(@Body() CreateUserDto: createUserDto) {
     return this.authService.register(CreateUserDto);
   }
 
